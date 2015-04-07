@@ -217,7 +217,7 @@ function gm_google_map_d3_projection(coordinates)
 <script>
 
 queue()
-    .defer(d3.json, "police_precincts.json")
+    .defer(d3.json, "../data/police_precincts.json")
     //.defer(d3.csv, "data/BK_dist.csv")
     .await(ready);
 
@@ -226,9 +226,9 @@ function getColor(d){
 	// on any parameter of your JSON!
 	var ratio=d["properties"]["Shape_Area"];
         if(ratio>0){
-		return d3.rgb(0,255*Math.sqrt(ratio),255*Math,sqrt(ratio));
+		return d3.rgb(0,0,255-(255*Math.sqrt((ratio)/(1000000000))));
 	}else{
-		return "black";
+		return "white";
 	}
 }
 
@@ -238,7 +238,7 @@ function ready(error, map) {
 }
 
 function mouseover(d){
-	var text='Precint Number: '+d.properties["Precinct"];
+	var text='Precinct Number: '+d.properties["Precinct"]+'<br>'+'Shape Area: '+Math.round(d.properties["Shape_Area"]);
 	// you can add any more information to the mouseover
 	// here, using data in your JSON
 	$(".mouseover").html(text);

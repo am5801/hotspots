@@ -217,16 +217,16 @@ function gm_google_map_d3_projection(coordinates)
 <script>
 
 queue()
-    .defer(d3.json, "../data/police_precincts.json")
+    .defer(d3.json, "../output/police_precincts_merged_collisions.json")
     //.defer(d3.csv, "data/BK_dist.csv")
     .await(ready);
 
 function getColor(d){
 	// set this color spectrum to be dependent
 	// on any parameter of your JSON!
-	var ratio=d["properties"]["Shape_Area"];
+	var ratio=d["properties"]["Year"]["2015"];
         if(ratio>0){
-		return d3.rgb(0,0,255-(255*Math.sqrt((ratio)/(1000000000))));
+		return d3.rgb(ratio,0,0);
 	}else{
 		return "white";
 	}
@@ -238,7 +238,11 @@ function ready(error, map) {
 }
 
 function mouseover(d){
-	var text='Precinct Number: '+d.properties["Precinct"]+'<br>'+'Shape Area: '+Math.round(d.properties["Shape_Area"]);
+	var text='Precinct Number: '+d.properties["Precinct"]+
+	'<br>'+'Accidents in 2012: '+Math.round(d.properties["Year"]["2012"])+
+	'<br>'+'Accidents in 2013: '+Math.round(d.properties["Year"]["2013"])+
+	'<br>'+'Accidents in 2014: '+Math.round(d.properties["Year"]["2014"])+
+	'<br>'+'Accidents in 2015: '+Math.round(d.properties["Year"]["2015"]);
 	// you can add any more information to the mouseover
 	// here, using data in your JSON
 	$(".mouseover").html(text);

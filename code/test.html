@@ -224,9 +224,9 @@ queue()
 function getColor(d){
 	// set this color spectrum to be dependent
 	// on any parameter of your JSON!
-	var ratio=d["properties"]["Year"]["2015"];
-        if(ratio>0){
-		return d3.rgb(ratio,0,0);
+	var total_acc=Math.round(d["properties"]["Year"]["2015"])+Math.round(d["properties"]["Year"]["2014"])+Math.round(d["properties"]["Year"]["2013"])+Math.round(d["properties"]["Year"]["2012"]);
+        if(total_acc>0){
+		return d3.rgb(255*((Math.sqrt(total_acc))/100),0,0);
 	}else{
 		return "white";
 	}

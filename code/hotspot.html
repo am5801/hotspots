@@ -39,8 +39,8 @@ div.googleMapView{
   position: absolute;
   top: 0px;
   left: 0px;
-  width: 100%;
-  height: 100%;
+  width: 400px;
+  height: 300px;
 }
 
 
@@ -56,6 +56,8 @@ div.googleMapView{
 
 <div class="googleMapView" id="gm_map_div"></div>
 
+<div id="causes"></div>
+
 <script>
 
 var gm_google_map;
@@ -68,7 +70,7 @@ var gm_projection;
 var gm_circle_padding;
 
 
-var gm_map_data;
+var gm_map_data = null;
 
 var gm_google_map_style =
 [
@@ -184,6 +186,7 @@ function gm_overlay_add()
 
 function gm_overlay_draw()
 {
+	if(!gm_map_data) return;
     gm_projection = gm_google_overlay.getProjection();
 
     var gm_path = d3.geo.path().projection(gm_google_map_d3_projection);
@@ -191,7 +194,7 @@ function gm_overlay_draw()
         .data(gm_map_data.features)
         .attr("d",gm_path)
         .enter();
-
+	var curSel = null;
 
     gm_d3_map.append("path")
         .attr("d", gm_path)
@@ -201,7 +204,27 @@ function gm_overlay_draw()
         .attr("opacity",0.5)
         .on("contextmenu", function(d){ alert('Hello Right Click'); } )
         .on("mouseover",mouseover)
-        .on("mouseout",mouseout);
+        .on("mouseout",mouseout)
+		.on("click",function(d){
+			console.log('Here',d);
+			if(curSel){
+				curSel.attr("fill",function(d){ return getColor(d)});
+			}
+			curSel = d3.select(this).attr('fill',null);
+			var bounds = new google.maps.LatLngBounds();
+			
+			function addCoords(arr) {
+				if(!arr.length) return;
+				if(Number.isNaN(+arr[0])) {
+					arr.forEach(addCoords);
+					return;
+				}
+				bounds.extend(new google.maps.LatLng(arr[1], arr[0]));
+			}
+			
+			addCoords(d.geometry.coordinates);
+			gm_google_map.fitBounds(bounds);
+		});
 }
 
 function gm_google_map_d3_projection(coordinates)
@@ -224,9 +247,9 @@ queue()
 function getColor(d){
 	// set this color spectrum to be dependent
 	// on any parameter of your JSON!
-	var ratio=d["properties"]["Year"]["2015"];
-        if(ratio>0){
-		return d3.rgb(ratio,0,0);
+	var total_acc=Math.round(d["properties"]["Year"]["2015"])+Math.round(d["properties"]["Year"]["2014"])+Math.round(d["properties"]["Year"]["2013"])+Math.round(d["properties"]["Year"]["2012"]);
+        if(total_acc>0){
+		return d3.rgb(255*((Math.sqrt(total_acc))/100),0,0);
 	}else{
 		return "white";
 	}
@@ -268,6 +291,7 @@ d3.select('html') // Selects the 'html' element
 		$("div.mouseover").css("margin-top",locs[1]);
     });
 
+var causes = d3.select("#causes");
 
 </script>
 </body>

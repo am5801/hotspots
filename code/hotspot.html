@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
-
 .zipcode path{
   stroke: #fff;
   stroke-linejoin: round;
   opacity: 0.8;
 }
-
 div.mouseover{
 	position: absolute;
 	background: black;
@@ -20,7 +18,6 @@ div.mouseover{
 	display: none;
         z-index: 1;
 }
-
 .gm_googleMapOverlay svg{
   position: absolute;
   top: -4000px;
@@ -28,13 +25,10 @@ div.mouseover{
   width: 8000px;
   height: 8000px;
 }
-
 div.gm_googleMapOverlay{
   top: 0px;
   left: 0px;
 }
-
-
 div.googleMapView{
   position: absolute;
   top: 0px;
@@ -42,8 +36,6 @@ div.googleMapView{
   width: 400px;
   height: 300px;
 }
-
-
 </style>
 <body onload="ready();">
 
@@ -59,19 +51,14 @@ div.googleMapView{
 <div id="causes"></div>
 
 <script>
-
 var gm_google_map;
 var gm_google_overlay;
 var gm_google_styled_map;
-
 var gm_svg_layer;
 var gm_path;
 var gm_projection;
 var gm_circle_padding;
-
-
 var gm_map_data = null;
-
 var gm_google_map_style =
 [
     {
@@ -150,8 +137,6 @@ var gm_google_map_style =
     ]
     }
 ];
-
-
 function gm_bind_google_map()
 {
   gm_google_map =
@@ -163,16 +148,12 @@ function gm_bind_google_map()
     disableDefaultUI: true,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   });
-
     gm_google_map.setOptions({styles: gm_google_map_style});
-
     gm_google_overlay = new google.maps.OverlayView();
     gm_google_overlay.onAdd = gm_overlay_add;
     gm_google_overlay.draw = gm_overlay_draw;
     gm_google_overlay.setMap(gm_google_map);
 }
-
-
 function gm_overlay_add()
 {
     gm_svg_layer = d3.select(gm_google_overlay.getPanes().overlayMouseTarget)
@@ -183,19 +164,16 @@ function gm_overlay_add()
         .append("g")
         .attr("class","gm_googleMapOverlay");
 }
-
 function gm_overlay_draw()
 {
 	if(!gm_map_data) return;
     gm_projection = gm_google_overlay.getProjection();
-
     var gm_path = d3.geo.path().projection(gm_google_map_d3_projection);
     var gm_d3_map = gm_svg_layer.selectAll("path")
         .data(gm_map_data.features)
         .attr("d",gm_path)
         .enter();
 	var curSel = null;
-
     gm_d3_map.append("path")
         .attr("d", gm_path)
         .attr("fill",function(d){ return getColor(d)})
@@ -226,24 +204,19 @@ function gm_overlay_draw()
 			gm_google_map.fitBounds(bounds);
 		});
 }
-
 function gm_google_map_d3_projection(coordinates)
 {
     var googleCoordinates = new google.maps.LatLng(coordinates[1], coordinates[0]);
     var pixelCoordinates = gm_projection.fromLatLngToDivPixel(googleCoordinates);
     return [pixelCoordinates.x+4000, pixelCoordinates.y+4000];
 }
-
-
 </script>
 
 <script>
-
 queue()
     .defer(d3.json, "../output/police_precincts_merged_collisions.json")
     //.defer(d3.csv, "data/BK_dist.csv")
     .await(ready);
-
 function getColor(d){
 	// set this color spectrum to be dependent
 	// on any parameter of your JSON!
@@ -254,12 +227,10 @@ function getColor(d){
 		return "white";
 	}
 }
-
 function ready(error, map) {
   gm_map_data = map;
   gm_bind_google_map();
 }
-
 function mouseover(d){
 	var text='Precinct Number: '+d.properties["Precinct"]+
 	'<br>'+'Accidents in 2012: '+Math.round(d.properties["Year"]["2012"])+
@@ -271,27 +242,21 @@ function mouseover(d){
 	$(".mouseover").html(text);
 	$(".mouseover").css("display","inline");
 }
-
 function mouseout(){
 	$(".mouseover").text("");
 	$(".mouseover").css("display","none");
 }
-
 // moves the mouseover box whenever the mouse is moved.
 d3.select('html') // Selects the 'html' element
   .on('mousemove', function()
     {
 		var locs=d3.mouse(this);	// get the mouse coordinates
-
 		// add some padding
 		locs[0]+=15;
 		locs[1]+=5;
-
 		$("div.mouseover").css("margin-left",locs[0]);
 		$("div.mouseover").css("margin-top",locs[1]);
     });
-
 var causes = d3.select("#causes");
-
 </script>
 </body>

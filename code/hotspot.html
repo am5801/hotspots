@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
+body {
+  margin: 0;
+  padding: 0;
+}
+
 .zipcode path{
   stroke: #fff;
   stroke-linejoin: round;
@@ -31,10 +36,14 @@ div.gm_googleMapOverlay{
 }
 div.googleMapView{
   position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 400px;
-  height: 300px;
+  width: 50%;
+  height: 100%;
+}
+
+div#causes{
+  position: absolute;
+  right: 0;
+  width: 50%;
 }
 </style>
 <body onload="ready();">
@@ -214,7 +223,7 @@ function gm_google_map_d3_projection(coordinates)
 
 <script>
 queue()
-    .defer(d3.json, "../output/police_precincts_merged_collisions.json")
+    .defer(d3.json, "../output/police_precincts_new.json")
     //.defer(d3.csv, "data/BK_dist.csv")
     .await(ready);
 function getColor(d){
@@ -227,9 +236,35 @@ function getColor(d){
 		return "white";
 	}
 }
+var collision_factors = {};
+var enf_causes = ['Unsafe Speed','Unsafe Lane Changing'];
+
+function update_bar(pid){
+	var bars = {};
+	enf_causes.forEach(function(cause){
+		if(pid){
+			bars[cause] = collision_factors[pid][cause];
+		}
+		else {
+			bars[cause] = 0;
+			Object.keys(collision_factors).forEach(function(pid) {
+			  bars[cause] += collision_factors[pid][cause];
+			})
+		}
+	});
+	console.log(bars);
+}
+
 function ready(error, map) {
+    if(!map) return;
+	map['features'].forEach(function(d) {
+    var p = d["properties"];
+	var pid = p['Precinct'];
+	collision_factors[pid] = p['Contributing_factors'];
+  });
   gm_map_data = map;
   gm_bind_google_map();
+  update_bar(null);
 }
 function mouseover(d){
 	var text='Precinct Number: '+d.properties["Precinct"]+
@@ -257,6 +292,32 @@ d3.select('html') // Selects the 'html' element
 		$("div.mouseover").css("margin-left",locs[0]);
 		$("div.mouseover").css("margin-top",locs[1]);
     });
-var causes = d3.select("#causes");
+var causes = d3.select("#causes")
+				.text('Hello! Please click on a Precinct on the map or in the list below for more details:');
+var ul = causes.append("ul");
+	var my_list = [
+	  {name: "Bronx", links: [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 52]},
+	  {name: "Brooklyn", links: [60, 61,  62,  63,  66,  67,  68,  69,  70,  71,  72,  73,  75,  76,  77,  78,  79,  81,  83,  84,  88,  90,  94, 102, 104, 106]},
+	  {name: "Manhattan", links: [1, 5,   6, 7, 9,  10,  13,  14,  17,  18,  19,  20,  22,  23,  24,  25, 26,  28,  30,  32, 33,  34,  52]},
+	  {name: "Queens", links: [75,  83, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115]},
+	  {name: "Staten Island", links: [120, 121, 122, 123]}
+	];
+	var toplist = ul;
+
+	toplist.selectAll("li")
+		.data(my_list)
+		.enter().append("li")
+		.text(function(d) { return d.name; })
+		.on("click", expand);
+
+	function expand(d) {
+	  d3.select(this)
+		.on("click", null)
+		.append("ul")
+		.selectAll("li")
+		.data(d.links)
+		.enter().append("li")
+		.text(function(d) { return d; });
+	}
 </script>
 </body>

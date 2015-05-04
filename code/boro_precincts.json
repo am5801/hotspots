@@ -1,0 +1,113 @@
+{
+ "name": "NYC Boroughs & Precincts",
+ "children": [
+  {
+   "name": "Bronx",
+   "children": [
+    {"name": 40, "size": 8833},
+    {"name": 41, "size": 1732},
+    {"name": 42, "size": 3623},
+    {"name": 43, "size": 10066},
+    {"name": 44, "size": 8833},
+    {"name": 45, "size": 1732},
+    {"name": 46, "size": 3623},
+    {"name": 47, "size": 10066},
+    {"name": 48, "size": 8833},
+    {"name": 49, "size": 1732},
+    {"name": 50, "size": 3623},
+    {"name": 52, "size": 10066}
+   ]
+  },
+  {
+   "name": "Brooklyn",
+   "children": [
+    {"name": 60, "size": 8833},
+    {"name": 61, "size": 1732},
+    {"name": 62, "size": 3623},
+    {"name": 63, "size": 10066},
+    {"name": 66, "size": 8833},
+    {"name": 67, "size": 1732},
+    {"name": 68, "size": 3623},
+    {"name": 69, "size": 10066},
+    {"name": 70, "size": 8833},
+    {"name": 71, "size": 1732},
+    {"name": 72, "size": 3623},
+    {"name": 73, "size": 10066},
+    {"name": 75, "size": 8833},
+    {"name": 76, "size": 1732},
+    {"name": 77, "size": 3623},
+    {"name": 78, "size": 10066},
+    {"name": 79, "size": 8833},
+    {"name": 81, "size": 1732},
+    {"name": 83, "size": 3623},
+    {"name": 84, "size": 10066},
+    {"name": 88, "size": 8833},
+    {"name": 90, "size": 1732},
+    {"name": 94, "size": 3623},
+    {"name": 102, "size": 10066},
+    {"name": 104, "size": 3623},
+    {"name": 106, "size": 10066}
+   ]
+  },
+  {
+   "name": "Manhattan",
+   "children": [
+    {"name": 1, "size": 333},
+    {"name": 5, "size": 333},
+    {"name": 6, "size": 333},
+    {"name": 7, "size": 333},
+    {"name": 9, "size": 333},
+    {"name": 10, "size": 333},
+    {"name": 13, "size": 333},
+    {"name": 14, "size": 333},
+    {"name": 17, "size": 333},
+    {"name": 18, "size": 333},
+    {"name": 19, "size": 333},
+    {"name": 20, "size": 333},
+    {"name": 22, "size": 333},
+    {"name": 23, "size": 333},
+    {"name": 24, "size": 333},
+    {"name": 25, "size": 333},
+    {"name": 26, "size": 333},
+    {"name": 28, "size": 333},
+    {"name": 30, "size": 333},
+    {"name": 32, "size": 333},
+    {"name": 33, "size": 333},
+    {"name": 34, "size": 333},
+    {"name": 52, "size": 333}
+   ]
+  },
+  {
+   "name": "Queens",
+   "children": [
+    {"name": 75, "size": 333},
+    {"name": 83, "size": 333},
+    {"name": 100, "size": 333},
+    {"name": 101, "size": 333},
+    {"name": 102, "size": 333},
+    {"name": 103, "size": 333},
+    {"name": 104, "size": 333},
+    {"name": 105, "size": 333},
+    {"name": 106, "size": 333},
+    {"name": 107, "size": 333},
+    {"name": 108, "size": 333},
+    {"name": 109, "size": 333},
+    {"name": 110, "size": 333},
+    {"name": 111, "size": 333},
+    {"name": 112, "size": 333},
+    {"name": 113, "size": 333},
+    {"name": 114, "size": 333},
+    {"name": 115, "size": 333}
+   ]
+  },
+  {
+   "name": "Staten Island",
+   "children": [
+    {"name": 120, "size": 333},
+    {"name": 121, "size": 333},
+    {"name": 122, "size": 333},
+    {"name": 123, "size": 333}
+  ]
+  }
+ ]
+}

@@ -155,7 +155,11 @@ function gm_bind_google_map()
 //  center: new google.maps.LatLng(40.6418553515528,-74.07965266950634),
     center: new google.maps.LatLng(40.7,-74.0),
     disableDefaultUI: true,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+	zoomControl: true,
+	zoomControlOptions: {
+    style: google.maps.ZoomControlStyle.LARGE
+	}
   });
     gm_google_map.setOptions({styles: gm_google_map_style});
     gm_google_overlay = new google.maps.OverlayView();
@@ -185,7 +189,7 @@ function gm_overlay_draw()
 	var curSel = null;
     gm_d3_map.append("path")
         .attr("d", gm_path)
-        .attr("fill",function(d){ return getColor(d)})
+        .attr("fill",null)
         .attr("stroke","blue")
         .attr("stroke-width","1px")
         .attr("opacity",0.5)
@@ -193,9 +197,8 @@ function gm_overlay_draw()
         .on("mouseover",mouseover)
         .on("mouseout",mouseout)
 		.on("click",function(d){
-			//console.log('Here',d);
 			if(curSel){
-				curSel.attr("fill",function(d){ return getColor(d)});
+				curSel.attr("fill","none");
 			}
 			curSel = d3.select(this).attr("fill","none").style("stroke","blue").style("stroke-width","2");
 			var bounds = new google.maps.LatLngBounds();
@@ -224,18 +227,19 @@ function gm_google_map_d3_projection(coordinates)
 <script>
 queue()
     .defer(d3.json, "../output/precincts_w_ratios.json")
-    //.defer(d3.csv, "data/BK_dist.csv")
     .await(ready);
-function getColor(d){
+
+//function getColor(d){
 	// set this color spectrum to be dependent
 	// on any parameter of your JSON!
-	var total_acc=d["properties"]["total"]["ratio"];
-        if(total_acc>=0){
-		return d3.lab(100*(1-total_acc),100,0);
-	}else{
-		return "blue";
-	}
-}
+//	var total_acc=d["properties"]["total"]["ratio"];
+//        if(total_acc>=0){
+//		return d3.lab(70,100*(total_acc),0);
+//	}else{
+//		return "blue";
+//	}
+//}
+
 var collision_factors = {};
 var enf_causes = ['Unsafe Speed','Unsafe Lane Changing'];
 

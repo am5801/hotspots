@@ -6,11 +6,6 @@ body {
   padding: 0;
 }
 
-<!-- .zipcode path{
-  stroke: #fff;
-  stroke-linejoin: round;
-  opacity: 0.8;
-} -->
 div.mouseover{
 	position: absolute;
 	background: black;
@@ -42,31 +37,35 @@ div.googleMapView{
 
 div#causes{
   position: absolute;
+  margin: 0px;
   right: 0;
-  width: 50%;
+  width: 49.5%;
 }
 
 #factors {
-	width:300px;
+	width:400px;
+	margin-top: 5px;
 }
 
 #factors div.bar {
-    font-size: .65em;
+    font-size: .8em;
     font-family: sans-serif;
-    color: white;
-    background-color: steelblue;
-    text-align: right;
+    color: black;
+    background-color: red;
+    text-align: left;
+	text-indent: -50px;
     padding: 0.5em;
-    margin: 0.2em;
-	margin-left:150px;
+    margin: 0.1em;
+	margin-left:250px;
 }
 
 .dot{
-	fill-opacity: 0.5;
+	fill-opacity: 0.8;
 }
 
 #factors div.label {
-	width: 150px;
+	width: 200px;
+	height: 20px;
 	overflow:hidden;
 	float:left;
 	white-space: nowrap;
@@ -230,7 +229,7 @@ function gm_overlay_draw()
         .on("mouseout",mouseout)
 		.on("click",function(d,a,e){
 			gm_svg_layer.selectAll("path").attr("fill",null).attr("fill-opacity",0.1);
-			console.log(e);
+			//console.log(e);
 			if(!e)
 				var e = this;
 				
@@ -254,9 +253,9 @@ function gm_overlay_draw()
 }
 var selectedP = undefined;
 function load(precinct){
-	console.log(precinct);
+	//console.log(precinct);
 	var p = 'p' + precinct.properties.Precinct + '.json';
-	console.log(p);
+	//console.log(p);
 	d3.json('../output/location_by_precincts/'+p, function(f){
 		selectedP = f;
 		drawDots(f);
@@ -269,7 +268,7 @@ function drawDots(f){
 		for(k in f){
 			data.push(f[k]);
 		}
-		console.log(gm_google_map.getZoom());
+		//console.log(gm_google_map.getZoom());
 		
 		var maxSize = 10-(15-(gm_google_map.getZoom()))*3;
 		maxSize = maxSize < 2 ? 2 : maxSize;
@@ -316,7 +315,7 @@ function getColor(d){
 }
 
 var collision_factors = {};
-var enf_causes = ['Unsafe Speed','Unsafe Lane Changing','Drugs (Illegal)','Alcohol Involvement'];
+var enf_causes = ['Prescription Medication','Alcohol Involvement','Drugs (Illegal)','Cell Phone (hand-held)','Cell Phone (hands-free)','Other Electronic Device','Unsafe Speed','Unsafe Lane Changing','Aggressive Driving/Road Rage'];
 
 function update_bar(pid){
 	var bars = [];
@@ -336,7 +335,7 @@ function update_bar(pid){
 				bars.push({type: cause, value: dic[cause]});
 			});
 		}
-		console.log(bars);
+		//console.log(bars);
 	});
 	var scale = d3.scale.linear()
         .domain([0, d3.max(bars, function(d){return d.value})])
@@ -362,7 +361,7 @@ function update_bar(pid){
     // exit selection
     
 	
-	console.log(bars);
+	//console.log(bars);
 }
 
 function ready(error, map) {
@@ -402,7 +401,7 @@ d3.select('html') // Selects the 'html' element
 		$("div.mouseover").css("margin-top",locs[1]);
     });
 var causes = d3.select("#causes")
-				.append('span').text('Hello! Please click on a Precinct on the map or in the list below for more details:');
+				.append('span').text('Click on a Precinct on the map or select one from the list below for more details:');
 var ul = causes.append("ul");
 	var my_list = [
 	  {name: "Bronx", links: [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 52]},
@@ -427,7 +426,7 @@ var ul = causes.append("ul");
 		.data(d.links)
 		.enter().append("li")
 		.on("click", function(d) {
-			console.log(d);
+			//console.log(d);
 			gm_svg_layer.selectAll('path').forEach(function(p){
 				p.forEach(function (p1){
 					if(p1.__data__.properties.Precinct == d){

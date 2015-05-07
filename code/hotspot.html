@@ -6,11 +6,11 @@ body {
   padding: 0;
 }
 
-.zipcode path{
+<!-- .zipcode path{
   stroke: #fff;
   stroke-linejoin: round;
   opacity: 0.8;
-}
+} -->
 div.mouseover{
 	position: absolute;
 	background: black;
@@ -45,6 +45,32 @@ div#causes{
   right: 0;
   width: 50%;
 }
+
+#factors {
+	width:300px;
+}
+
+#factors div.bar {
+    font-size: .65em;
+    font-family: sans-serif;
+    color: white;
+    background-color: steelblue;
+    text-align: right;
+    padding: 0.5em;
+    margin: 0.2em;
+	margin-left:150px;
+}
+
+.dot{
+	fill-opacity: 0.5;
+}
+
+#factors div.label {
+	width: 150px;
+	overflow:hidden;
+	float:left;
+	white-space: nowrap;
+}
 </style>
 <body onload="ready();">
 
@@ -57,8 +83,9 @@ div#causes{
 
 <div class="googleMapView" id="gm_map_div"></div>
 
-<div id="causes"></div>
-
+<div id="causes">
+<div id="factors">Cristian!</div>
+</div>
 <script>
 var gm_google_map;
 var gm_google_overlay;
@@ -155,7 +182,11 @@ function gm_bind_google_map()
 //  center: new google.maps.LatLng(40.6418553515528,-74.07965266950634),
     center: new google.maps.LatLng(40.7,-74.0),
     disableDefaultUI: true,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+	zoomControl: true,
+	zoomControlOptions: {
+    style: google.maps.ZoomControlStyle.LARGE
+	}
   });
     gm_google_map.setOptions({styles: gm_google_map_style});
     gm_google_overlay = new google.maps.OverlayView();
@@ -173,6 +204,7 @@ function gm_overlay_add()
         .append("g")
         .attr("class","gm_googleMapOverlay");
 }
+
 function gm_overlay_draw()
 {
 	if(!gm_map_data) return;
@@ -183,21 +215,26 @@ function gm_overlay_draw()
         .attr("d",gm_path)
         .enter();
 	var curSel = null;
+	
+	if(selectedP){
+		drawDots(selectedP);
+	}
+	
     gm_d3_map.append("path")
         .attr("d", gm_path)
-        .attr("fill",function(d){ return getColor(d)})
+        .attr("fill",function(d){return getColor(d)})
         .attr("stroke","blue")
         .attr("stroke-width","1px")
         .attr("opacity",0.5)
-        .on("contextmenu", function(d){ alert('Hello Right Click'); } )
         .on("mouseover",mouseover)
         .on("mouseout",mouseout)
-		.on("click",function(d){
-			//console.log('Here',d);
-			if(curSel){
-				curSel.attr("fill",function(d){ return getColor(d)});
-			}
-			curSel = d3.select(this).attr("fill","none").style("stroke","blue").style("stroke-width","2");
+		.on("click",function(d,a,e){
+			gm_svg_layer.selectAll("path").attr("fill",null).attr("fill-opacity",0.1);
+			console.log(e);
+			if(!e)
+				var e = this;
+				
+			curSel = d3.select(e).attr("fill","white").attr("fill-opacity",0).style("stroke","blue").style("stroke-width","2");
 			var bounds = new google.maps.LatLngBounds();
 			
 			function addCoords(arr) {
@@ -211,8 +248,49 @@ function gm_overlay_draw()
 			
 			addCoords(d.geometry.coordinates);
 			gm_google_map.fitBounds(bounds);
+			load(d);
+			update_bar(d.properties.Precinct);
 		});
 }
+var selectedP = undefined;
+function load(precinct){
+	console.log(precinct);
+	var p = 'p' + precinct.properties.Precinct + '.json';
+	console.log(p);
+	d3.json('../output/location_by_precincts/'+p, function(f){
+		selectedP = f;
+		drawDots(f);
+		
+	})
+}
+
+function drawDots(f){		
+		var data = [];
+		for(k in f){
+			data.push(f[k]);
+		}
+		console.log(gm_google_map.getZoom());
+		
+		var maxSize = 10-(15-(gm_google_map.getZoom()))*3;
+		maxSize = maxSize < 2 ? 2 : maxSize;
+		var g = gm_svg_layer.append('g');
+		gm_svg_layer.selectAll('.dot').remove();
+		selected =gm_svg_layer.selectAll('.dot').data(data).enter();
+		var sizeScale = d3.scale.linear()
+		.domain([0, d3.max(data,function(d){return d['X_Ratio']})])
+		.range([2, maxSize]);
+		var circles = selected.append('circle')
+			.attr('class', 'dot')
+			.attr('r', function(d){return sizeScale(Math.sqrt(d['X_Ratio']))})
+			.attr('cx', function(d){return gm_google_map_d3_projection([d.Lon, d.Lat])[0]})
+			.attr('cy', function(d){return gm_google_map_d3_projection([d.Lon, d.Lat])[1]});
+		
+		
+
+}
+
+
+
 function gm_google_map_d3_projection(coordinates)
 {
     var googleCoordinates = new google.maps.LatLng(coordinates[1], coordinates[0]);
@@ -225,32 +303,65 @@ function gm_google_map_d3_projection(coordinates)
 queue()
     .defer(d3.json, "../output/precincts_w_ratios.json")
     .await(ready);
+
 function getColor(d){
 	// set this color spectrum to be dependent
 	// on any parameter of your JSON!
 	var total_acc=d["properties"]["total"]["ratio"];
-        if(total_acc>=0){
-		return d3.lab(70,100*(total_acc),0);
+       if(total_acc>=0){
+	return d3.hsl(60,1,1-total_acc);
 	}else{
 		return "blue";
 	}
 }
+
 var collision_factors = {};
-var enf_causes = ['Unsafe Speed','Unsafe Lane Changing'];
+var enf_causes = ['Unsafe Speed','Unsafe Lane Changing','Drugs (Illegal)','Alcohol Involvement'];
 
 function update_bar(pid){
-	var bars = {};
+	var bars = [];
 	enf_causes.forEach(function(cause){
 		if(pid){
-			bars[cause] = collision_factors[pid][cause];
+			bars.push({type: cause, value: collision_factors[pid][cause]});
+			//bars[cause] = collision_factors[pid][cause];
 		}
 		else {
-			bars[cause] = 0;
+			var dic = {};
+			dic[cause] = 0;
 			Object.keys(collision_factors).forEach(function(pid) {
-			  bars[cause] += collision_factors[pid][cause];
-			})
+			  dic[cause] += collision_factors[pid][cause];
+			});
+			
+			Object.keys(dic).forEach(function(cause){
+				bars.push({type: cause, value: dic[cause]});
+			});
 		}
+		console.log(bars);
 	});
+	var scale = d3.scale.linear()
+        .domain([0, d3.max(bars, function(d){return d.value})])
+        .range([0, 100]);
+		
+	 d3.select("#factors").text('');	
+	var bars = d3.select("#factors")
+        .selectAll("div")
+        .attr("id","work_queues_chart")
+        .data(bars);
+		
+	 var divs = bars
+        .enter()
+			.append("div");
+	divs.append("div").attr('class', 'label').text(function(d){return d.type;});
+	var bars = divs.append("div").attr('class', 'bar');
+
+    // update selection
+    bars
+        .style("width", function (d) {return scale(d.value) + "%";})
+        .text(function (d) {return d.value;});
+    
+    // exit selection
+    
+	
 	console.log(bars);
 }
 
@@ -291,14 +402,14 @@ d3.select('html') // Selects the 'html' element
 		$("div.mouseover").css("margin-top",locs[1]);
     });
 var causes = d3.select("#causes")
-				.text('Hello! Please click on a Precinct on the map or in the list below for more details:');
+				.append('span').text('Hello! Please click on a Precinct on the map or in the list below for more details:');
 var ul = causes.append("ul");
 	var my_list = [
 	  {name: "Bronx", links: [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 52]},
 	  {name: "Brooklyn", links: [60, 61,  62,  63,  66,  67,  68,  69,  70,  71,  72,  73,  75,  76,  77,  78,  79,  81,  83,  84,  88,  90,  94, 102, 104, 106]},
 	  {name: "Manhattan", links: [1, 5,   6, 7, 9,  10,  13,  14,  17,  18,  19,  20,  22,  23,  24,  25, 26,  28,  30,  32, 33,  34,  52]},
 	  {name: "Queens", links: [75,  83, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115]},
-	  {name: "Staten Island", links: [120, 121, 122, 123]}
+	  {name: "Staten Island", links: [120, 122, 123]}
 	];
 	var toplist = ul;
 
@@ -309,12 +420,23 @@ var ul = causes.append("ul");
 		.on("click", expand);
 
 	function expand(d) {
+		toplist.selectAll("li").selectAll('ul').remove();
 	  d3.select(this)
-		.on("click", null)
 		.append("ul")
 		.selectAll("li")
 		.data(d.links)
 		.enter().append("li")
+		.on("click", function(d) {
+			console.log(d);
+			gm_svg_layer.selectAll('path').forEach(function(p){
+				p.forEach(function (p1){
+					if(p1.__data__.properties.Precinct == d){
+						d3.select(p1).on('click')(p1.__data__,{},p1);
+					}
+				})
+				
+			})
+		})
 		.text(function(d) { return d; });
 	}
 </script>

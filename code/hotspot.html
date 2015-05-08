@@ -32,7 +32,7 @@ div.gm_googleMapOverlay{
 div.googleMapView{
   position: absolute;
   width: 50%;
-  height: 100%;
+  height: 80%;
 }
 
 div#causes{
@@ -43,7 +43,7 @@ div#causes{
 }
 
 #factors {
-	width:400px;
+	width:380px;
 	margin-top: 5px;
 }
 
@@ -56,7 +56,7 @@ div#causes{
 	text-indent: -45px;
     padding: 0.5em;
     margin: 0.1em;
-	margin-left:250px;
+	margin-left:270px;
 }
 
 .dot{
@@ -64,7 +64,7 @@ div#causes{
 }
 
 #factors div.label {
-	width: 220px;
+	width: 250px;
 	height: 20px;
 	overflow:hidden;
 	float:left;
@@ -306,16 +306,19 @@ queue()
 function getColor(d){
 	// set this color spectrum to be dependent
 	// on any parameter of your JSON!
-	var total_acc=d["properties"]["total"]["ratio"];
-       if(total_acc>=0){
-	return d3.hsl(1,1,1-total_acc);
-	}else{
+	var total_acc = d["properties"]["total"]["ratio"];
+    if(total_acc>=0){
+		return d3.hsl(1,1,1-total_acc);
+	} else{
 		return "blue";
 	}
 }
 
 var collision_factors = {};
-var enf_causes = ['Prescription Medication','Alcohol Involvement','Drugs (Illegal)','Cell Phone (hand-held)','Cell Phone (hands-free)','Other Electronic Device','Unsafe Speed','Unsafe Lane Changing','Aggressive Driving/Road Rage'];
+var enf_causes = ['Driver Inattention\/Distraction','Fatigued\/Drowsy','Failure to Yield Right-of-Way',
+'Backing Unsafely','Lost Consciousness','Turning Improperly','Prescription Medication','Driver Inexperience',
+'Traffic Control Disregarded','Alcohol Involvement','Aggressive Driving/Road Rage','Other Electronic Device','Failure to Keep Right',
+'Unsafe Speed','Drugs (Illegal)','Passing or Lane Usage Improper','Unsafe Lane Changing','Cell Phone (hands-free)'];
 
 function update_bar(pid){
 	var bars = [];
@@ -401,7 +404,7 @@ d3.select('html') // Selects the 'html' element
 		$("div.mouseover").css("margin-top",locs[1]);
     });
 var causes = d3.select("#causes")
-				.append('span').text('Click on a Precinct on the map or select one from the list below for more details:');
+				.append('span').text('Click on a Precinct on the map above or select one from the list below for more details:');
 var ul = causes.append("ul");
 	var my_list = [
 	  {name: "Bronx", links: [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 52]},

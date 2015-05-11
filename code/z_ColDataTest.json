@@ -1,0 +1,12 @@
+{
+	"year_2014": 
+		[ {"hour": 0, "avg_col": 9.9}, {"hour": 1, "avg_col": 7.2}, {"hour": 2, "avg_col": 5.5}, {"hour": 3, "avg_col": 4.7}, {"hour": 4, "avg_col": 5.4}, {"hour": 5, "avg_col": 6}, {"hour": 6, "avg_col": 9.1}, {"hour": 7, "avg_col": 11.8}, {"hour": 8, "avg_col": 28}, {"hour": 9, "avg_col": 27.6}, {"hour": 10, "avg_col": 25}, {"hour": 11, "avg_col": 25.2}, {"hour": 12, "avg_col": 27.3}, {"hour": 13, "avg_col": 28.7}, {"hour": 14, "avg_col": 32.1}, {"hour": 15, "avg_col": 28.8}, {"hour": 16, "avg_col": 35.7}, {"hour": 17, "avg_col": 34.2}, {"hour": 18, "avg_col": 29.8}, {"hour": 19, "avg_col": 25.1}, {"hour": 20, "avg_col": 21.1}, {"hour": 21, "avg_col": 17.2}, {"hour": 22, "avg_col": 15.3}, {"hour": 23, "avg_col": 12.3}, {"hour": 24, "avg_col": 9.3} ], 
+	"year_2013": 
+		[ {"hour": 0, "avg_col": 10}, {"hour": 1, "avg_col": 7.4}, {"hour": 2, "avg_col": 5.8}, {"hour": 3, "avg_col": 4.8}, {"hour": 4, "avg_col": 5.7}, {"hour": 5, "avg_col": 6.1}, {"hour": 6, "avg_col": 9.1}, {"hour": 7, "avg_col": 12.4}, {"hour": 8, "avg_col": 26.6}, {"hour": 9, "avg_col": 26.6}, {"hour": 10, "avg_col": 24.7}, {"hour": 11, "avg_col": 25.6}, {"hour": 12, "avg_col": 26.4}, {"hour": 13, "avg_col": 28.4}, {"hour": 14, "avg_col": 32.3}, {"hour": 15, "avg_col": 28.6}, {"hour": 16, "avg_col": 36.1}, {"hour": 17, "avg_col": 34.1}, {"hour": 18, "avg_col": 30.6}, {"hour": 19, "avg_col": 25.1}, {"hour": 20, "avg_col": 21}, {"hour": 21, "avg_col": 16.8}, {"hour": 22, "avg_col": 14.5}, {"hour": 23, "avg_col": 12.3}, {"hour": 24, "avg_col": 10} ]
+}
+
+
+
+
+
+

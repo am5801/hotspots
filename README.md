@@ -6,4 +6,4 @@ Our project goal is to provide the NYPD with enhanced cognition of traffic colli
 
 All data used is openly available [here](http://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95).
 
-A live demo can be found [here](http://rawgit.com/NYU-CS6313-Projects/sp2015-group6/master/code/test3.html).
+A live demo can be found [here](http://rawgit.com/am5801/hotspots/master/code/hotspot.html).

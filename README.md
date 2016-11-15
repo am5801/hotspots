@@ -6,6 +6,6 @@ This project aimed at providing the NYPD with enhanced cognition of traffic coll
 
 All data used is openly available [here](http://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95).
 
-A live demo can be found [here](http://rawgit.com/am5801/hotspots/master/code/hotspot.html).
+A live demo can be found [here](http://am5801.github.io/hotspots).
 
 A video describing our tool can be found [here](http://screencast.com/t/3Rgw9GtCEw).

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <meta charset="utf-8">
 <style>
     body {
@@ -44,6 +44,13 @@
         height: 80%;
     }
     
+    div#header {
+    	margin: 10px auto;
+    	width: 100%;
+    	text-align: center;
+    	color: red;
+    }
+
     div#causes {
         position: absolute;
         margin: 0px;
@@ -98,6 +105,27 @@
         font-family: arial;
         font-size: 0.6em;
     }
+
+	.logoHeader {
+	    height: 40px;
+	    vertical-align: middle;
+	    text-align: center; 
+	}
+
+	.logo {
+		height: 100px;
+		margin-top: -30px;
+	}
+
+	.floatLeft {
+		float: left;
+		margin-left: 10px;
+	}
+
+	.floatRight {
+		float: right;
+		margin-right: 10px;
+	}
 </style>
 
 <body onload="ready();">
@@ -107,6 +135,14 @@
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://d3js.org/queue.v1.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <div id="header">
+    	<header>
+		<a href="https://cusp.nyu.edu"><img class="logo floatLeft" src="http://magnet.nyu.edu/wp-content/uploads/2015/10/CUSP_logo.jpg" alt="CUSP_long_color"></a>
+    	<a href="https://github.com/am5801/hotspots"><img class="logo floatRight" src="https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub-Mark"></a>
+    	<h1 class="logoHeader">TRAFFIC COLLISIONS HOTSPOTS</h1>
+		</header>
+    </div>
 
     <div id="map_list">
         <div class="mouseover"></div>
